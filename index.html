@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="fr"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1">&lt;title&gt;Analyse Multi-Championnats&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap');</p>
+<p class="p2"><br></p>
+<p class="p1">:root{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--bg:#0E1512;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--surface:#151F1A;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--surface-2:#1D2B23;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--line:#2A3830;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--turf:#2F8F4E;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--turf-light:#5FCB84;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--chalk:#F3F1E7;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--muted:#8FA096;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--amber:#E8A33D;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--clay:#C1584B;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>--radius:10px;</p>
+<p class="p1">}</p>
+<p class="p1">*{box-sizing:border-box;}</p>
+<p class="p1">body{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:</p>
+<p class="p1"><span class="Apple-converted-space">    </span>radial-gradient(1200px 600px at 15% -10%, rgba(47,143,78,0.14), transparent 60%),</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--chalk);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'Inter',sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:32px 20px 60px;</p>
+<p class="p1">}</p>
+<p class="p1">.wrap{max-width:1080px;margin:0 auto;}</p>
+<p class="p2"><br></p>
+<p class="p1">/* header */</p>
+<p class="p1">header{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content:space-between;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:flex-end;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-wrap:wrap;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-bottom:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding-bottom:20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:24px;</p>
+<p class="p1">}</p>
+<p class="p1">.eyebrow{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:11px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.12em;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--turf-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:0 0 6px;</p>
+<p class="p1">}</p>
+<p class="p1">h1{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'Oswald',sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight:700;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:34px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.01em;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1">}</p>
+<p class="p1">.sub{color:var(--muted);font-size:14px;margin-top:6px;max-width:520px;}</p>
+<p class="p1">.stat-pill{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--surface);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:8px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:100px;</p>
+<p class="p1">}</p>
+<p class="p1">.stat-pill b{color:var(--turf-light);font-weight:600;}</p>
+<p class="p2"><br></p>
+<p class="p1">/* demo banner */</p>
+<p class="p1">.demo-banner{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:flex-start;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:linear-gradient(90deg, rgba(232,163,61,0.12), rgba(232,163,61,0.03));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid rgba(232,163,61,0.35);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:var(--radius);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:12px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:#F0D9AE;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:24px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height:1.5;</p>
+<p class="p1">}</p>
+<p class="p1">.demo-banner strong{color:var(--amber);}</p>
+<p class="p2"><br></p>
+<p class="p1">/* filters */</p>
+<p class="p1">.filters{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex-wrap:wrap;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:22px;</p>
+<p class="p1">}</p>
+<p class="p1">.chip{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:7px 13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:100px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--surface);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor:pointer;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition:all .15s ease;</p>
+<p class="p1">}</p>
+<p class="p1">.chip:hover{border-color:var(--turf);color:var(--chalk);}</p>
+<p class="p1">.chip.active{background:var(--turf);border-color:var(--turf);color:#0E1512;font-weight:600;}</p>
+<p class="p2"><br></p>
+<p class="p1">/* league group */</p>
+<p class="p1">.league-group{margin-bottom:30px;}</p>
+<p class="p1">.league-title{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'Oswald',sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.06em;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--turf-light);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:12px;</p>
+<p class="p1">}</p>
+<p class="p1">.league-title::after{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>content:'';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>flex:1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height:1px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--line);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* card */</p>
+<p class="p1">.card{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--surface);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:var(--radius);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-bottom:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow:hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition:border-color .15s ease;</p>
+<p class="p1">}</p>
+<p class="p1">.card:hover{border-color:#3A4C40;}</p>
+<p class="p1">.card-head{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:grid;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>grid-template-columns:1fr auto;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:16px 18px 8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>cursor:pointer;</p>
+<p class="p1">}</p>
+<p class="p1">.matchup{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'Oswald',sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:19px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.01em;</p>
+<p class="p1">}</p>
+<p class="p1">.matchup .vs{color:var(--muted);font-size:13px;font-family:'JetBrains Mono',monospace;}</p>
+<p class="p1">.kickoff{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align:right;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>white-space:nowrap;</p>
+<p class="p1">}</p>
+<p class="p1">.confidence{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.08em;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:3px 9px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:100px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:inline-block;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top:4px;</p>
+<p class="p1">}</p>
+<p class="p1">.conf-forte{background:rgba(47,143,78,0.18);color:var(--turf-light);border:1px solid rgba(47,143,78,0.4);}</p>
+<p class="p1">.conf-moderee{background:rgba(232,163,61,0.15);color:var(--amber);border:1px solid rgba(232,163,61,0.4);}</p>
+<p class="p1">.conf-ouverte{background:rgba(193,88,75,0.15);color:#E08276;border:1px solid rgba(193,88,75,0.4);}</p>
+<p class="p2"><br></p>
+<p class="p1">/* tug of war probability strip - signature element */</p>
+<p class="p1">.tug{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:0 18px 16px;</p>
+<p class="p1">}</p>
+<p class="p1">.tug-bar{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>height:26px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:6px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow:hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>position:relative;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--line);</p>
+<p class="p1">}</p>
+<p class="p1">.tug-seg{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:11px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight:600;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:#0E1512;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition:width .4s ease;</p>
+<p class="p1">}</p>
+<p class="p1">.seg-home{background:var(--turf-light);}</p>
+<p class="p1">.seg-draw{background:#4C5C53;color:var(--chalk);}</p>
+<p class="p1">.seg-away{background:#D9A55C;}</p>
+<p class="p1">.tug-labels{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>justify-content:space-between;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top:5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.04em;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">/* expandable detail */</p>
+<p class="p1">.detail{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>max-height:0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>overflow:hidden;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>transition:max-height .3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-top:1px solid var(--line);</p>
+<p class="p1">}</p>
+<p class="p1">.detail.open{max-height:260px;}</p>
+<p class="p1">.detail-inner{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:16px 18px 18px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:grid;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>grid-template-columns:1fr 1fr;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:18px;</p>
+<p class="p1">}</p>
+<p class="p1">.detail-block h4{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0.08em;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin:0 0 8px;</p>
+<p class="p1">}</p>
+<p class="p1">.placeholder-row{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>gap:6px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>align-items:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1">}</p>
+<p class="p1">.dot{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width:20px;height:20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--surface-2);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border:1px dashed var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>display:flex;align-items:center;justify-content:center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1">}</p>
+<p class="p1">.note{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>grid-column:1 / -1;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:13px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height:1.6;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:#C9D3CC;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>background:var(--surface-2);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-radius:8px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:12px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-left:2px solid var(--turf);</p>
+<p class="p1">}</p>
+<p class="p1">.note b{color:var(--turf-light);}</p>
+<p class="p2"><br></p>
+<p class="p1">.expand-hint{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family:'JetBrains Mono',monospace;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding:0 18px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top:-8px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">footer{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top:36px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding-top:20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>border-top:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size:12px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>line-height:1.7;</p>
+<p class="p1">}</p>
+<p class="p1">footer strong{color:var(--clay);}</p>
+<p class="p2"><br></p>
+<p class="p1">@media (max-width:640px){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1{font-size:26px;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.detail-inner{grid-template-columns:1fr;}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>header{flex-direction:column;align-items:flex-start;}</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1">&lt;div class="wrap"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="eyebrow"&gt;Tableau de bord — v1&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h1&gt;Analyse Multi-Championnats&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="sub"&gt;Probabilités de résultat, forme et niveau de confiance analytique — un seul coup d'œil par match.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-pill"&gt;&lt;b id="matchCount"&gt;0&lt;/b&gt; matchs suivis&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="demo-banner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>⚠️ &lt;div&gt;&lt;strong&gt;Données de démonstration.&lt;/strong&gt; Les probabilités affichées viennent d'un flux réel de calendrier/cotes implicites ; les blocs "Forme" et "Face-à-face" sont des emplacements à connecter à votre source de stats (API football de votre choix). Aucune donnée ici ne constitue une garantie de résultat — le football conserve toujours une part d'aléa.&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="filters" id="filters"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="leagues"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Outil d'aide à la lecture de match, pas un service de pronostic garanti. Les probabilités sont des estimations statistiques, pas des certitudes. &lt;strong&gt;Jeu responsable :&lt;/strong&gt; fixez-vous un budget, ne rejouez jamais une perte, 18+. En France : appelez le 09 74 75 13 13 (Joueurs Info Service).</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/footer&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">// ---------------------------------------------------------------</p>
+<p class="p1">// SCHEMA DE DONNÉES — à remplacer par votre flux live (API cotes/stats)</p>
+<p class="p1">// Chaque match : { league, home, away, kickoff, prob:{home,draw,away} }</p>
+<p class="p1">// form/h2h volontairement vides ici (pas de fausses données) :</p>
+<p class="p1">// branchez-les sur votre propre source pour les activer dans le detail-panel.</p>
+<p class="p1">// ---------------------------------------------------------------</p>
+<p class="p1">const MATCHES = [</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"Paris Saint-Germain", away:"Stade Rennais FC", kickoff:"Dim 23 août, 20h45", prob:{home:67.6, draw:17.7, away:14.7}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"Olympique Marseille", away:"Strasbourg Alsace", kickoff:"Ven 21 août, 20h45", prob:{home:58.3, draw:21.5, away:20.2}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"Racing Club de Lens", away:"AJ Auxerre", kickoff:"Sam 22 août, 17h15", prob:{home:59.6, draw:22.1, away:18.3}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"Toulouse FC", away:"Olympique Lyon", kickoff:"Sam 22 août, 20h45", prob:{home:27.8, draw:26.1, away:46.1}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"ESTAC Troyes", away:"Paris FC", kickoff:"Sam 22 août, 20h45", prob:{home:34.8, draw:27.5, away:37.7}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Ligue 1", home:"Le Mans FC", away:"Stade Brest 29", kickoff:"Sam 22 août, 20h45", prob:{home:37.5, draw:27.3, away:35.2}},</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Premier League", home:"Arsenal FC", away:"Coventry City", kickoff:"Ven 21 août, 21h00", prob:{home:82.7, draw:12.0, away:5.3}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Premier League", home:"Manchester City", away:"AFC Bournemouth", kickoff:"Dim 23 août, 15h00", prob:{home:65.9, draw:18.3, away:15.8}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Premier League", home:"Hull City", away:"Manchester United", kickoff:"Sam 22 août, 13h30", prob:{home:12.1, draw:19.1, away:68.8}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Premier League", home:"Newcastle United", away:"Liverpool FC", kickoff:"Dim 23 août, 17h30", prob:{home:32.6, draw:24.4, away:43.0}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"Premier League", home:"Everton FC", away:"Crystal Palace", kickoff:"Sam 22 août, 16h00", prob:{home:44.6, draw:27.5, away:27.9}},</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"La Liga", home:"Atletico Madrid", away:"Malaga CF", kickoff:"Mer 19 août, 21h00", prob:{home:71.9, draw:17.8, away:10.3}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"La Liga", home:"Sevilla FC", away:"Rayo Vallecano", kickoff:"Sam 15 août, 21h30", prob:{home:42.1, draw:29.6, away:28.3}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"La Liga", home:"Espanyol Barcelona", away:"Levante UD", kickoff:"Dim 16 août, 19h00", prob:{home:47.2, draw:28.4, away:24.4}},</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{league:"La Liga", home:"Racing Santander", away:"Villarreal CF", kickoff:"Dim 16 août, 17h00", prob:{home:28.1, draw:27.3, away:44.6}},</p>
+<p class="p1">];</p>
+<p class="p2"><br></p>
+<p class="p1">function confidenceLevel(p){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const max = Math.max(p.home, p.draw, p.away);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(max &gt;= 55) return {label:"Tendance forte", cls:"conf-forte"};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(max &gt;= 40) return {label:"Tendance modérée", cls:"conf-moderee"};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return {label:"Match ouvert", cls:"conf-ouverte"};</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function noteText(m){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const p = m.prob;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const max = Math.max(p.home, p.draw, p.away);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const favori = max === p.home ? m.home : max === p.away ? m.away : "le nul";</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const gap = Math.abs(p.home - p.away);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(max &gt;= 55){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;b&gt;${favori}&lt;/b&gt; ressort nettement favori d'après l'estimation (${max.toFixed(1)}%). Écart net avec l'adversaire — signal statistiquement clair, à confronter à l'actualité de l'effectif (blessures, rotation) avant toute décision.`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} else if(max &gt;= 40){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `Avantage mesuré pour &lt;b&gt;${favori}&lt;/b&gt; (${max.toFixed(1)}%), mais l'écart avec les autres issues reste resserré (${gap.toFixed(1)} pts entre les deux équipes). Match à surveiller de près, pas de tendance dominante.`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return `Aucune issue ne se détache — probabilités proches entre les trois résultats. Match statistiquement &lt;b&gt;imprévisible&lt;/b&gt;, la prudence analytique s'impose.`;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">const leagues = [...new Set(MATCHES.map(m=&gt;m.league))];</p>
+<p class="p1">const filtersEl = document.getElementById('filters');</p>
+<p class="p1">const leaguesEl = document.getElementById('leagues');</p>
+<p class="p1">let activeFilter = 'Tous';</p>
+<p class="p2"><br></p>
+<p class="p1">function renderFilters(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>filtersEl.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>['Tous', ...leagues].forEach(l=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const chip = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>chip.className = 'chip' + (activeFilter===l ? ' active' : '');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>chip.textContent = l;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>chip.onclick = ()=&gt;{ activeFilter = l; renderFilters(); renderMatches(); };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>filtersEl.appendChild(chip);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function renderMatches(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>leaguesEl.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const filtered = activeFilter==='Tous' ? MATCHES : MATCHES.filter(m=&gt;m.league===activeFilter);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('matchCount').textContent = filtered.length;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const grouped = {};</p>
+<p class="p1"><span class="Apple-converted-space">  </span>filtered.forEach(m=&gt;{ (grouped[m.league] = grouped[m.league]||[]).push(m); });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Object.entries(grouped).forEach(([league, matches])=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const group = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>group.className = 'league-group';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>group.innerHTML = `&lt;div class="league-title"&gt;${league}&lt;/div&gt;`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>matches.forEach((m, idx)=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const conf = confidenceLevel(m.prob);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const cardId = `${league}-${idx}`.replace(/\s+/g,'');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const card = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.className = 'card';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-head" onclick="toggleDetail('${cardId}')"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="matchup"&gt;${m.home} &lt;span class="vs"&gt;vs&lt;/span&gt; ${m.away}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="confidence ${conf.cls}"&gt;${conf.label}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="kickoff"&gt;${m.kickoff}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tug"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tug-bar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tug-seg seg-home" style="width:${m.prob.home}%"&gt;${m.prob.home &gt;= 12 ? m.prob.home.toFixed(0)+'%' : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tug-seg seg-draw" style="width:${m.prob.draw}%"&gt;${m.prob.draw &gt;= 12 ? m.prob.draw.toFixed(0)+'%' : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tug-seg seg-away" style="width:${m.prob.away}%"&gt;${m.prob.away &gt;= 12 ? m.prob.away.toFixed(0)+'%' : ''}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="tug-labels"&gt;&lt;span&gt;${shortName(m.home)}&lt;/span&gt;&lt;span&gt;Nul&lt;/span&gt;&lt;span&gt;${shortName(m.away)}&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="expand-hint"&gt;▾ Détail de l'analyse&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="detail" id="detail-${cardId}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="detail-inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="detail-block"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h4&gt;Forme (5 derniers)&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="placeholder-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="dot"&gt;?&lt;/div&gt;&lt;div class="dot"&gt;?&lt;/div&gt;&lt;div class="dot"&gt;?&lt;/div&gt;&lt;div class="dot"&gt;?&lt;/div&gt;&lt;div class="dot"&gt;?&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span style="margin-left:6px;"&gt;à connecter&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="detail-block"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;h4&gt;Face-à-face&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="placeholder-row"&gt;Historique non connecté&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="note"&gt;${noteText(m)}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>group.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>leaguesEl.appendChild(group);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function shortName(n){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>return n.length &gt; 14 ? n.split(' ').slice(0,2).join(' ') : n;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function toggleDetail(id){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const el = document.getElementById('detail-'+id);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>el.classList.toggle('open');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">renderFilters();</p>
+<p class="p1">renderMatches();</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
