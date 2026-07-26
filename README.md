@@ -1,4 +1,4 @@
-# Lucide — Analyse sportive
+# statline — Analyse sportive
 
 Site web + application installable (PWA) pour l'analyse de matchs de football, connectée en direct à l'API [API-Football](https://www.api-football.com/).
 
@@ -49,7 +49,7 @@ Deux limites à connaître :
 ## Structure du projet
 
 ```
-lucide/
+statline/
 ├── index.html          (page d'accueil / vitrine)
 ├── app.html             (l'application — dashboard live)
 ├── manifest.json         (config PWA)
