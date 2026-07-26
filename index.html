@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucide — Analyse sportive claire</title>
+<meta name="description" content="Des tableaux de bord d'analyse sportive clairs et honnêtes. Probabilités, tendances, confiance — jamais des garanties.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#0E1512">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#0E1512; --surface:#151F1A; --line:#2A3830; --turf:#2F8F4E; --turf-light:#5FCB84;
+  --chalk:#F3F1E7; --muted:#8FA096; --amber:#E8A33D;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(1000px 500px at 20% -10%, rgba(47,143,78,0.18), transparent 60%),
+    var(--bg);
+  color:var(--chalk); font-family:'Inter',sans-serif; line-height:1.6;
+}
+.nav{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:20px 6vw; border-bottom:1px solid var(--line);
+}
+.brand{display:flex; align-items:center; gap:10px; font-family:'Oswald',sans-serif; font-size:20px; font-weight:600; letter-spacing:0.02em;}
+.mark{width:28px;height:28px;border-radius:50%;border:2px solid var(--turf-light); display:flex;align-items:center;justify-content:center;}
+.mark::after{content:'';width:11px;height:11px;border-radius:50%;background:var(--turf);}
+.cta{
+  font-family:'JetBrains Mono',monospace; font-size:13px; text-decoration:none; color:#0E1512;
+  background:var(--turf-light); padding:10px 20px; border-radius:100px; font-weight:600;
+  transition:transform .15s ease;
+}
+.cta:hover{transform:translateY(-1px);}
+
+.hero{padding:90px 6vw 60px; max-width:900px;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--turf-light);margin-bottom:16px;}
+h1{font-family:'Oswald',sans-serif;font-size:clamp(36px,6vw,60px);font-weight:700;line-height:1.08;letter-spacing:-0.01em;margin-bottom:20px;}
+h1 span{color:var(--turf-light);}
+.lead{font-size:18px;color:#C9D3CC;max-width:560px;margin-bottom:36px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;text-decoration:none;color:#0E1512;
+  background:var(--turf-light);padding:14px 26px;border-radius:10px;
+}
+.btn-secondary{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:15px;text-decoration:none;color:var(--chalk);
+  border:1px solid var(--line);padding:14px 26px;border-radius:10px;
+}
+
+.section{padding:60px 6vw;border-top:1px solid var(--line);}
+.section h2{font-family:'Oswald',sans-serif;font-size:26px;text-transform:uppercase;letter-spacing:0.01em;margin-bottom:8px;}
+.section .section-sub{color:var(--muted);margin-bottom:34px;max-width:560px;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;
+}
+.card .icon{font-size:22px;margin-bottom:12px;}
+.card h3{font-family:'Oswald',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;color:var(--turf-light);}
+.card p{font-size:14px;color:#C9D3CC;}
+
+.module-card{
+  display:flex;gap:20px;background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:28px;align-items:center;flex-wrap:wrap;
+}
+.module-badge{
+  font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;
+  background:rgba(95,203,132,0.12);color:var(--turf-light);border:1px solid rgba(95,203,132,0.35);
+  padding:4px 10px;border-radius:100px;display:inline-block;margin-bottom:10px;
+}
+.module-card h3{font-family:'Oswald',sans-serif;font-size:20px;margin-bottom:8px;}
+.module-card p{color:var(--muted);font-size:14px;max-width:480px;}
+.module-more{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+  border:1px dashed var(--line);padding:10px 16px;border-radius:8px;text-align:center;
+}
+
+.disclaimer{
+  background:linear-gradient(90deg, rgba(232,163,61,0.1), rgba(232,163,61,0.02));
+  border:1px solid rgba(232,163,61,0.3);border-radius:10px;padding:16px 20px;font-size:13px;color:#F0D9AE;
+}
+
+footer{padding:36px 6vw;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="brand"><span class="mark"></span> Lucide</div>
+  <a class="cta" href="app.html">Ouvrir l'app →</a>
+</div>
+
+<div class="hero">
+  <p class="eyebrow">Analyse sportive, sans blabla</p>
+  <h1>Voyez le match <span>avant qu'il commence.</span></h1>
+  <p class="lead">Lucide transforme les cotes de marché en probabilités claires, avec un niveau de confiance honnête pour chaque rencontre. Pas de promesse de gain — juste une lecture nette des chances de chaque équipe.</p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="app.html">Lancer l'analyse</a>
+    <a class="btn-secondary" href="#comment">Comment ça marche</a>
+  </div>
+</div>
+
+<div class="section" id="comment">
+  <h2>Comment ça marche</h2>
+  <p class="section-sub">Trois étapes, aucune boîte noire.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🔑</div>
+      <h3>1. Ta clé, tes données</h3>
+      <p>Connecte gratuitement ta propre clé API sportive. Aucune donnée ne transite par nos serveurs — tout reste entre ton navigateur et la source.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>2. Conversion transparente</h3>
+      <p>Chaque cote est convertie en probabilité, marge du bookmaker retirée. La méthode est toujours visible, jamais un chiffre sorti de nulle part.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>3. Confiance, pas certitude</h3>
+      <p>Un badge "Tendance forte / modérée / Match ouvert" par match — pour lire vite, sans jamais te promettre un résultat garanti.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Modules</h2>
+  <p class="section-sub">Lucide est pensé pour grandir au-delà du football.</p>
+  <div class="module-card">
+    <div>
+      <span class="module-badge">Disponible</span>
+      <h3>⚽ Analyse Football</h3>
+      <p>Probabilités de résultat, tendances par journée, badges de confiance — pour n'importe quel championnat couvert par la source de données.</p>
+    </div>
+    <div class="module-more">+ Autres sports<br>à venir</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="disclaimer">
+    ⚠️ Lucide est un outil de lecture statistique, pas un service de pronostic garanti. Les probabilités affichées sont des estimations, jamais des certitudes. Jeu responsable : fixez-vous un budget, ne rejouez jamais une perte, 18+. En France : 09 74 75 13 13 (Joueurs Info Service).
+  </div>
+</div>
+
+<footer>Lucide — application installable, fonctionne dans le navigateur, aucune donnée personnelle collectée.</footer>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
