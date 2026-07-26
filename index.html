@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statline — Lis le match avant qu'il ne commence</title>
+<meta name="description" content="Des tableaux de bord d'analyse sportive clairs et honnêtes. Probabilités, tendances, confiance — jamais des garanties.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#0B120E">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{
+  --bg:#0B120E; --surface:#151F1A; --surface-2:#1D2B23; --line:#2A3830;
+  --turf:#2F8F4E; --turf-light:#5FCB84; --chalk:#F3F1E7; --muted:#8FA096; --amber:#E8A33D;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(900px 500px at 8% -5%, rgba(95,203,132,0.30), transparent 60%),
+    radial-gradient(700px 400px at 95% 5%, rgba(232,163,61,0.16), transparent 55%),
+    var(--bg);
+  color:var(--chalk); font-family:'Inter',sans-serif; line-height:1.6;
+}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 6vw;border-bottom:1px solid var(--line);}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:21px;font-weight:800;letter-spacing:0.01em;text-transform:uppercase;}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--turf-light);display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-weight:800;color:#0B120E;font-size:14px;}
+.cta{
+  font-family:'JetBrains Mono',monospace;font-size:13px;text-decoration:none;color:#0B120E;
+  background:var(--turf-light);padding:11px 22px;border-radius:100px;font-weight:700;
+}
+
+.hero{padding:90px 6vw 40px;max-width:920px;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--turf-light);background:rgba(95,203,132,0.12);
+  border:1px solid rgba(95,203,132,0.4);padding:7px 16px;border-radius:100px;margin-bottom:26px;
+}
+.eyebrow::before{content:'●';font-size:9px;}
+h1{
+  font-family:'Oswald',sans-serif;font-weight:800;font-size:clamp(42px,7vw,78px);line-height:0.98;
+  letter-spacing:-0.01em;margin-bottom:26px;text-transform:uppercase;
+}
+h1 .fill{color:var(--turf-light);}
+h1 .outline{color:transparent;-webkit-text-stroke:2px var(--amber);}
+.lead{font-size:19px;color:#C9D3CC;max-width:540px;margin-bottom:38px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px;}
+.btn-primary{
+  font-family:'Inter',sans-serif;font-weight:700;font-size:15px;text-decoration:none;color:#0B120E;
+  background:var(--turf-light);padding:16px 28px;border-radius:12px;
+}
+.btn-secondary{
+  font-family:'Inter',sans-serif;font-weight:700;font-size:15px;text-decoration:none;color:var(--chalk);
+  border:1px solid var(--line);padding:16px 28px;border-radius:12px;
+}
+
+.stats-strip{display:flex;border:1px solid var(--line);border-radius:14px;overflow:hidden;max-width:680px;}
+.stat{flex:1;padding:22px 24px;border-right:1px solid var(--line);}
+.stat:last-child{border-right:none;}
+.stat .num{font-family:'Oswald',sans-serif;font-size:30px;font-weight:800;color:var(--turf-light);}
+.stat .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:5px;}
+
+.section{padding:70px 6vw;border-top:1px solid var(--line);}
+.section h2{font-family:'Oswald',sans-serif;font-size:28px;text-transform:uppercase;font-weight:800;letter-spacing:0.01em;margin-bottom:8px;}
+.section .section-sub{color:var(--muted);margin-bottom:38px;max-width:560px;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;}
+.card .icon{font-size:24px;margin-bottom:14px;}
+.card h3{font-family:'Oswald',sans-serif;font-size:16px;text-transform:uppercase;font-weight:700;letter-spacing:0.02em;margin-bottom:10px;color:var(--turf-light);}
+.card p{font-size:14px;color:#C9D3CC;}
+
+.module-card{
+  display:flex;gap:20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:30px;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden;
+}
+.module-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle, rgba(95,203,132,0.18), transparent 70%);
+}
+.module-badge{
+  font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;
+  background:rgba(95,203,132,0.15);color:var(--turf-light);border:1px solid rgba(95,203,132,0.4);
+  padding:5px 12px;border-radius:100px;display:inline-block;margin-bottom:12px;font-weight:600;
+}
+.module-card h3{font-family:'Oswald',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;text-transform:uppercase;}
+.module-card p{color:var(--muted);font-size:14px;max-width:480px;}
+.module-more{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);
+  border:1px dashed var(--line);padding:12px 18px;border-radius:10px;text-align:center;position:relative;z-index:2;
+}
+
+.disclaimer{
+  background:linear-gradient(90deg, rgba(232,163,61,0.12), rgba(232,163,61,0.02));
+  border:1px solid rgba(232,163,61,0.35);border-radius:12px;padding:18px 22px;font-size:13px;color:#F0D9AE;
+}
+
+footer{padding:40px 6vw;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="brand"><span class="mark">S</span> Statline</div>
+  <a class="cta" href="app.html">Ouvrir l'app →</a>
+</div>
+
+<div class="hero">
+  <p class="eyebrow">En direct — Ligue 1, Premier League, Liga, Serie A, Bundesliga</p>
+  <h1>Lis le match<br><span class="fill">avant</span> qu'il ne <span class="outline">commence</span></h1>
+  <p class="lead">Statline transforme les cotes de marché en probabilités claires, avec un niveau de confiance honnête pour chaque rencontre. Pas de promesse de gain — juste une lecture nette des chances de chaque équipe.</p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="app.html">Lancer l'analyse</a>
+    <a class="btn-secondary" href="#comment">Comment ça marche</a>
+  </div>
+  <div class="stats-strip">
+    <div class="stat"><div class="num">1200+</div><div class="lbl">compétitions couvertes</div></div>
+    <div class="stat"><div class="num">100%</div><div class="lbl">cotes de marché réelles</div></div>
+    <div class="stat"><div class="num">0€</div><div class="lbl">pour démarrer</div></div>
+  </div>
+</div>
+
+<div class="section" id="comment">
+  <h2>Comment ça marche</h2>
+  <p class="section-sub">Trois étapes, aucune boîte noire.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🔑</div>
+      <h3>1. Ta clé, tes données</h3>
+      <p>Connecte gratuitement ta propre clé API sportive. Aucune donnée ne transite par nos serveurs — tout reste entre ton navigateur et la source.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>2. Conversion transparente</h3>
+      <p>Chaque cote est convertie en probabilité, marge du bookmaker retirée. La méthode est toujours visible, jamais un chiffre sorti de nulle part.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>3. Confiance, pas certitude</h3>
+      <p>Un badge "Tendance forte / modérée / Match ouvert" par match — pour lire vite, sans jamais te promettre un résultat garanti.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Modules</h2>
+  <p class="section-sub">Statline est pensé pour grandir au-delà du football.</p>
+  <div class="module-card">
+    <div>
+      <span class="module-badge">Disponible</span>
+      <h3>⚽ Analyse Football</h3>
+      <p>Probabilités de résultat, tendances par journée, badges de confiance — pour n'importe quel championnat couvert par la source de données.</p>
+    </div>
+    <div class="module-more">+ Autres sports<br>à venir</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="disclaimer">
+    ⚠️ Statline est un outil de lecture statistique, pas un service de pronostic garanti. Les probabilités affichées sont des estimations, jamais des certitudes. Jeu responsable : fixez-vous un budget, ne rejouez jamais une perte, 18+. En France : 09 74 75 13 13 (Joueurs Info Service).
+  </div>
+</div>
+
+<footer>Statline — application installable, fonctionne dans le navigateur, aucune donnée personnelle collectée.</footer>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
