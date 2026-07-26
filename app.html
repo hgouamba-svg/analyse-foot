@@ -175,7 +175,7 @@ const dateInput = document.getElementById('dateInput');
   dateInput.value = d.toISOString().slice(0,10);
 })();
 
-function season = '2023';(dateStr){
+function season = '2023';
   const d = new Date(dateStr);
   const y = d.getFullYear();
   const m = d.getMonth() + 1; // saison européenne : commence en juillet/août
