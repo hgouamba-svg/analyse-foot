@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statline — App</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#F6F5F1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F5F1; --ink:#0E1A14; --forest:#0C2A20; --green:#0B6B4F; --mint:#4FD69C;
+  --amber:#C87C1A; --amber-dark:#A5620F; --line:rgba(14,26,20,0.12); --muted:rgba(14,26,20,0.5);
+  --surface-2:rgba(14,26,20,0.04);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;padding-bottom:60px;}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;
+  border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(246,245,241,0.92);
+  backdrop-filter:blur(14px);z-index:10;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Saira Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:0.03em;text-decoration:none;color:var(--ink);text-transform:uppercase;}
+.mark{width:26px;height:26px;border-radius:7px;background:var(--forest);color:var(--mint);font-family:'Saira Condensed',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.mark::after{content:'S';}
+.gear{
+  background:none;border:1px solid var(--line);color:var(--muted);width:38px;height:38px;border-radius:10px;
+  cursor:pointer;font-size:16px;
+}
+.gear:hover{border-color:var(--green);color:var(--ink);}
+
+.wrap{max-width:820px;margin:0 auto;padding:0 5vw;}
+
+/* settings panel */
+.settings{
+  display:none;background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:20px;margin-top:20px;box-shadow:0 12px 32px -20px rgba(12,42,32,0.25);
+}
+.settings.open{display:block;}
+.settings label{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);display:block;margin-bottom:6px;}
+.settings input{
+  width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+  padding:11px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;margin-bottom:14px;
+}
+.settings .hint{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.settings .hint a{color:var(--green);}
+.btn{
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;border:none;border-radius:8px;
+  padding:11px 20px;cursor:pointer;
+}
+.btn-primary{background:var(--green);color:#fff;}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--ink);}
+
+/* controls */
+.controls{
+  display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:24px 0;
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;
+  box-shadow:0 12px 32px -22px rgba(12,42,32,0.2);
+}
+.field{flex:1;min-width:150px;}
+.field label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);display:block;margin-bottom:6px;}
+.field select, .field input[type="date"]{
+  width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);
+  padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;
+}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:6px;}
+
+/* states */
+.state{text-align:center;padding:50px 20px;color:var(--muted);}
+.state.error{color:var(--amber-dark);}
+.state a{color:var(--green);}
+.spinner{
+  width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;
+  margin:0 auto 14px;animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* dashboard (tug-of-war design, adapté au thème clair) */
+.league-title{display:flex;align-items:center;gap:10px;font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:16px;letter-spacing:0.04em;color:var(--green);margin:24px 0 12px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 12px 28px -22px rgba(12,42,32,0.2);}
+.card-head{display:flex;justify-content:space-between;gap:14px;padding:16px 18px 8px;flex-wrap:wrap;}
+.matchup{font-family:'Saira Condensed',sans-serif;font-weight:600;font-size:19px;}
+.matchup .vs{color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;}
+.kickoff{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
+.confidence{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;padding:3px 9px;border-radius:100px;display:inline-block;margin-top:6px;margin-right:6px;font-weight:600;}
+.conf-forte{background:rgba(11,107,79,0.1);color:var(--green);border:1px solid rgba(11,107,79,0.3);}
+.conf-moderee{background:rgba(200,124,26,0.12);color:var(--amber-dark);border:1px solid rgba(200,124,26,0.35);}
+.conf-ouverte{background:rgba(200,124,26,0.08);color:var(--amber-dark);border:1px solid rgba(200,124,26,0.2);}
+.conf-nodata{background:var(--surface-2);color:var(--muted);border:1px solid var(--line);}
+.tug{padding:0 18px 16px;}
+.tug-bar{display:flex;height:24px;border-radius:6px;overflow:hidden;border:1px solid var(--line);}
+.tug-seg{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fff;}
+.seg-home{background:var(--green);}
+.seg-draw{background:#8A9690;}
+.seg-away{background:var(--amber);}
+.tug-labels{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:5px;}
+.no-odds{padding:0 18px 16px;font-size:12px;color:var(--muted);font-style:italic;}
+.note{margin:0 18px 16px;font-size:12px;line-height:1.6;color:rgba(14,26,20,0.72);background:var(--surface-2);border-radius:8px;padding:10px 12px;border-left:2px solid var(--green);}
+.footer-note{margin-top:30px;font-size:12px;color:var(--muted);line-height:1.7;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="index.html"><span class="mark"></span> Statline</a>
+  <button class="gear" id="gearBtn" title="Réglages">⚙</button>
+</div>
+
+<div class="wrap">
+
+  <div class="settings" id="settingsPanel">
+    <label for="apiKey">Clé API (Odds-API.io)</label>
+    <input type="password" id="apiKey" placeholder="Colle ta clé ici">
+    <p class="hint">
+      Ta clé reste uniquement dans ce navigateur (stockage local), elle n'est jamais envoyée à un serveur autre que odds-api.io.
+      Pas de clé ? Crée un compte gratuit sur <a href="https://odds-api.io" target="_blank" rel="noopener">odds-api.io</a> — la clé arrive par email (100 requêtes/heure, jusqu'à 500/jour, sans carte bancaire).
+    </p>
+    <button class="btn btn-primary" id="saveKeyBtn">Enregistrer</button>
+  </div>
+
+  <div class="controls">
+    <div class="field">
+      <label>Compétition</label>
+      <select id="league">
+        <option value="ligue 1">Ligue 1</option>
+        <option value="premier league">Premier League</option>
+        <option value="la liga">La Liga</option>
+        <option value="serie a">Serie A</option>
+        <option value="bundesliga">Bundesliga</option>
+        <option value="champions league">Ligue des Champions</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Date</label>
+      <input type="date" id="dateInput">
+    </div>
+    <div class="field" style="flex:0 0 auto;">
+      <button class="btn btn-primary" id="analyzeBtn">Analyser</button>
+    </div>
+  </div>
+
+  <div id="results"></div>
+
+  <p class="footer-note">
+    Outil d'aide à la lecture de match, pas un service de pronostic garanti. Probabilités dérivées de cotes de marché (marge bookmaker retirée), pas des certitudes.
+    <strong>Jeu responsable :</strong> fixez-vous un budget, ne rejouez jamais une perte, 18+. En France : 09 74 75 13 13 (Joueurs Info Service).
+  </p>
+</div>
+
+<script>
+const API_BASE = "https://api.odds-api.io/v3";
+const resultsEl = document.getElementById('results');
+const settingsPanel = document.getElementById('settingsPanel');
+const gearBtn = document.getElementById('gearBtn');
+const apiKeyInput = document.getElementById('apiKey');
+
+// --- réglages : clé stockée en local, jamais envoyée ailleurs qu'à odds-api.io ---
+apiKeyInput.value = localStorage.getItem('statline_odds_api_key') || '';
+gearBtn.onclick = () => settingsPanel.classList.toggle('open');
+document.getElementById('saveKeyBtn').onclick = () => {
+  localStorage.setItem('statline_odds_api_key', apiKeyInput.value.trim());
+  settingsPanel.classList.remove('open');
+};
+if (!apiKeyInput.value) settingsPanel.classList.add('open');
+
+// date par défaut : aujourd'hui
+const dateInput = document.getElementById('dateInput');
+dateInput.value = new Date().toISOString().slice(0,10);
+
+// quelques bookmakers recreational courants ; le plan gratuit n'en retournera
+// que 2 parmi ceux-ci, les autres sont simplement absents de la réponse.
+// Le plan gratuit d'Odds-API.io limite à 2 bookmakers maximum, choisis une
+// fois pour toutes sur le compte. Bet365 + Unibet couvrent bien les grands
+// championnats européens.
+const BOOKMAKERS = "Bet365,Unibet";
+
+async function apiGet(path, params){
+  const key = localStorage.getItem('statline_odds_api_key');
+  if(!key){ throw new Error('NO_KEY'); }
+  const url = new URL(API_BASE + path);
+  url.searchParams.set('apiKey', key);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+  let res;
+  try{
+    res = await fetch(url);
+  }catch(e){
+    throw new Error('NETWORK_OR_CORS');
+  }
+  if(res.status === 401) throw new Error('API_ERROR:Clé API invalide');
+  if(res.status === 429) throw new Error('API_ERROR:Quota atteint (limite du plan gratuit) — réessaie plus tard ou demain');
+  if(!res.ok) throw new Error('HTTP_' + res.status);
+  return await res.json();
+}
+
+function oddsToProb(oddsArr){
+  // oddsArr = [homeOdd, drawOdd, awayOdd] (decimal)
+  const raw = oddsArr.map(o => 1/o);
+  const total = raw.reduce((a,b)=>a+b, 0);
+  return raw.map(r => +(r/total*100).toFixed(1));
+}
+
+function confidenceLevel(p){
+  const max = Math.max(p.home, p.draw, p.away);
+  if(max >= 55) return {label:"Tendance forte", cls:"conf-forte"};
+  if(max >= 40) return {label:"Tendance modérée", cls:"conf-moderee"};
+  return {label:"Match ouvert", cls:"conf-ouverte"};
+}
+
+function noteText(m){
+  const p = m.prob;
+  const max = Math.max(p.home, p.draw, p.away);
+  const favori = max === p.home ? m.home : max === p.away ? m.away : "le nul";
+  if(max >= 55) return `<b>${favori}</b> ressort nettement favori (${max.toFixed(1)}%) selon les cotes de marché.`;
+  if(max >= 40) return `Avantage mesuré pour <b>${favori}</b> (${max.toFixed(1)}%), écart resserré avec les autres issues.`;
+  return `Aucune issue ne se détache — match statistiquement <b>imprévisible</b>.`;
+}
+
+function extractMatchWinnerOdds(oddsResponse){
+  // structure Odds-API.io : response.bookmakers = { "Bet365": [{name:"ML", odds:[{home,draw,away}]}], ... }
+  if(!oddsResponse || !oddsResponse.bookmakers) return null;
+  const home=[], draw=[], away=[];
+  for(const bookmakerName of Object.keys(oddsResponse.bookmakers)){
+    const markets = oddsResponse.bookmakers[bookmakerName];
+    const ml = markets.find(m => m.name === "ML");
+    if(!ml || !ml.odds || !ml.odds[0]) continue;
+    const o = ml.odds[0];
+    if(o.home && o.draw && o.away){
+      home.push(parseFloat(o.home));
+      draw.push(parseFloat(o.draw));
+      away.push(parseFloat(o.away));
+    }
+  }
+  if(!home.length) return null;
+  const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+  return [avg(home), avg(draw), avg(away)];
+}
+
+function renderState(html){ resultsEl.innerHTML = `<div class="state">${html}</div>`; }
+
+let leaguesCache = null;
+async function resolveLeagueSlugs(keyword){
+  if(!leaguesCache){
+    leaguesCache = await apiGet('/leagues', { sport: 'football' });
+  }
+  const normalize = s => (s || '').toLowerCase().replace(/-/g, ' ');
+  const EXCLUDE = ['women', 'u19', 'u20', 'u21', 'youth', 'afc', 'caf', 'ofc', 'concacaf'];
+  const matches = leaguesCache.filter(l => {
+    const n = normalize(l.name);
+    const s = normalize(l.slug);
+    const kw = n.includes(keyword) || s.includes(keyword);
+    const excluded = EXCLUDE.some(x => n.includes(x) || s.includes(x));
+    return kw && !excluded;
+  });
+  return matches.map(l => l.slug);
+}
+
+async function runAnalysis(){
+  const leagueKeyword = document.getElementById('league').value;
+  const leagueName = document.getElementById('league').selectedOptions[0].text;
+  const date = dateInput.value;
+
+  if(!localStorage.getItem('statline_odds_api_key')){
+    settingsPanel.classList.add('open');
+    renderState('⚠️ Ajoute ta clé API dans les réglages (⚙ en haut à droite) avant de lancer une analyse.');
+    return;
+  }
+
+  renderState('<div class="spinner"></div>Recherche de la compétition…');
+
+  let leagueSlugs;
+  try{
+    leagueSlugs = await resolveLeagueSlugs(leagueKeyword);
+  }catch(e){
+    return handleError(e);
+  }
+
+  if(!leagueSlugs.length){
+    renderState(`Compétition "${leagueName}" introuvable dans le catalogue Odds-API.io. Le nom exact diffère peut-être — réessaie avec une autre compétition, ou signale-le.`);
+    return;
+  }
+
+  renderState('<div class="spinner"></div>Recherche des matchs…');
+
+  let events = [];
+  try{
+    const batches = await Promise.all(
+      leagueSlugs.map(slug => apiGet('/events', { sport: 'football', league: slug, limit: 100 }).catch(() => []))
+    );
+    events = batches.flat();
+  }catch(e){
+    return handleError(e);
+  }
+
+  // Filtrage côté client : uniquement par date exacte (la ou les compétitions sont déjà filtrées côté serveur)
+  const filtered = (events || []).filter(ev => (ev.date || '').slice(0, 10) === date);
+
+  if(!filtered.length){
+    renderState(`Aucun match trouvé pour ${leagueName} le ${date}. La compétition est peut-être en trêve à cette date, ou aucun match n'est programmé ce jour précis — essaie une autre date.`);
+    return;
+  }
+
+  renderState('<div class="spinner"></div>Récupération des cotes…');
+
+  const matches = [];
+  let oddsErrorSample = null;
+  for(const ev of filtered){
+    let oddsData = null;
+    try{
+      oddsData = await apiGet('/odds', { eventId: ev.id, bookmakers: BOOKMAKERS });
+    }catch(e){
+      oddsErrorSample = e.message; // on garde une trace pour diagnostic, sans bloquer les autres matchs
+    }
+
+    const raw = extractMatchWinnerOdds(oddsData);
+    const m = {
+      home: ev.home,
+      away: ev.away,
+      kickoff: new Date(ev.date).toLocaleString('fr-FR', {weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}),
+      prob: null,
+    };
+    if(raw){
+      const [h,d,a] = oddsToProb(raw);
+      m.prob = {home:h, draw:d, away:a};
+    }
+    matches.push(m);
+  }
+
+  const allFailedTechnically = oddsErrorSample && matches.every(m => !m.prob);
+  renderDashboard(leagueName, date, matches, allFailedTechnically ? oddsErrorSample : null);
+}
+
+function handleError(e){
+  if(e.message === 'NETWORK_OR_CORS'){
+    renderState(`<span class="error">⚠️ La requête a échoué (réseau ou blocage CORS du navigateur).</span><br><br>
+    Certaines API bloquent les appels faits directement depuis un site (sécurité). Si ça persiste, il faudra passer par un petit proxy — voir le fichier README fourni avec le projet pour la marche à suivre.`);
+  } else if(e.message.startsWith('API_ERROR')){
+    const detail = e.message.replace('API_ERROR:', '');
+    renderState(`⚠️ L'API a renvoyé une erreur précise :<br><code style="color:var(--amber);">${detail}</code><br><br>Vérifie ta clé dans les réglages.`);
+  } else {
+    renderState(`⚠️ Une erreur inattendue est survenue (${e.message}). Réessaie dans un instant.`);
+  }
+}
+
+function renderDashboard(leagueName, date, matches, technicalError){
+  let html = `<div class="league-title">${leagueName} — ${date}</div>`;
+  if(technicalError){
+    html += `<div class="no-odds" style="color:var(--amber);padding:12px 0;">⚠️ Les cotes n'ont pas pu être récupérées (erreur technique : <code>${technicalError.replace('API_ERROR:','')}</code>) — ce n'est probablement pas une absence réelle de cotes.</div>`;
+  }
+  for(const m of matches){
+    html += `<div class="card">
+      <div class="card-head">
+        <div>
+          <div class="matchup">${m.home} <span class="vs">vs</span> ${m.away}</div>
+          ${m.prob ? (() => { const c = confidenceLevel(m.prob); return `<span class="confidence ${c.cls}">${c.label}</span><span class="confidence" style="background:rgba(95,203,132,0.1);color:var(--turf-light);border:1px solid rgba(95,203,132,0.3);">Cotes marché</span>`; })() : `<span class="confidence conf-nodata">Cotes non disponibles</span>`}
+        </div>
+        <div class="kickoff">${m.kickoff}</div>
+      </div>`;
+    if(m.prob){
+      html += `<div class="tug">
+        <div class="tug-bar">
+          <div class="tug-seg seg-home" style="width:${m.prob.home}%">${m.prob.home>=12?m.prob.home.toFixed(0)+'%':''}</div>
+          <div class="tug-seg seg-draw" style="width:${m.prob.draw}%">${m.prob.draw>=12?m.prob.draw.toFixed(0)+'%':''}</div>
+          <div class="tug-seg seg-away" style="width:${m.prob.away}%">${m.prob.away>=12?m.prob.away.toFixed(0)+'%':''}</div>
+        </div>
+        <div class="tug-labels"><span>${m.home}</span><span>Nul</span><span>${m.away}</span></div>
+      </div>
+      <div class="note">${noteText(m)}</div>`;
+    } else {
+      html += `<div class="no-odds">Aucune cote publiée pour ce match par les bookmakers couverts par le plan gratuit.</div>`;
+    }
+    html += `</div>`;
+  }
+  resultsEl.innerHTML = html;
+}
+
+document.getElementById('analyzeBtn').onclick = runAnalysis;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
