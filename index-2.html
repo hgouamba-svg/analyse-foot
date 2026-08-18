@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statline — L'analyse du match, avant le coup d'envoi</title>
+<meta name="description" content="Statline convertit les cotes du marché en probabilités lisibles, avec la forme récente et un indice de confiance sur chaque rencontre.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#0C2A20">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F5F1; --ink:#0E1A14; --forest:#0C2A20; --green:#0B6B4F; --mint:#4FD69C; --amber:#C87C1A; --amber-dark:#A5620F;
+  }
+  html, body{ margin:0; padding:0; background:var(--cream); }
+  *{ box-sizing:border-box; }
+  body{ font-family:'DM Sans', system-ui, sans-serif; color:var(--ink); min-height:100vh; overflow-x:hidden; }
+  a{ color:var(--green); text-decoration:none; }
+  a:hover{ color:var(--ink); }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .display{ font-family:'Saira Condensed', sans-serif; font-weight:700; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ticker */
+  .ticker-bar{
+    background:var(--forest); color:var(--cream); padding:0 32px; display:flex; align-items:stretch;
+    overflow:hidden; height:42px;
+  }
+  .ticker-live{
+    display:flex; align-items:center; gap:8px; padding-right:20px; border-right:1px solid rgba(246,245,241,0.16);
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--mint); white-space:nowrap; flex-shrink:0;
+  }
+  .ticker-dot{ width:6px; height:6px; border-radius:50%; background:var(--mint); }
+  .ticker-track{
+    display:flex; align-items:center; gap:26px; padding-left:20px; font-family:'JetBrains Mono',monospace;
+    font-size:11.5px; color:rgba(246,245,241,0.72); white-space:nowrap; overflow:hidden;
+  }
+  .ticker-track span.lg{ color:rgba(246,245,241,0.42); }
+  .ticker-track span.val{ color:var(--mint); }
+
+  /* header */
+  header{
+    position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between;
+    gap:24px; padding:16px 32px; background:rgba(246,245,241,0.92); backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(14,26,20,0.1);
+  }
+  .brand{ display:flex; align-items:center; gap:11px; }
+  .mark{
+    width:30px; height:30px; border-radius:8px; background:var(--forest); color:var(--mint);
+    font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .wordmark{ font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:22px; letter-spacing:0.08em; }
+  nav{ display:flex; align-items:center; gap:30px; font-size:14px; color:rgba(14,26,20,0.66); }
+  nav a{ color:inherit; }
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:8px;
+    background:var(--forest); color:var(--cream) !important; font-weight:700; font-size:14px;
+  }
+
+  /* hero */
+  .hero{
+    display:grid; grid-template-columns:minmax(360px,1fr) minmax(360px,0.95fr); gap:64px; align-items:start;
+    padding:72px 32px 64px; max-width:1400px; margin:0 auto;
+  }
+  .league-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .league-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; padding:6px 11px;
+    border-radius:6px; background:rgba(11,107,79,0.09); color:var(--green);
+  }
+  h1{
+    font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:clamp(38px,5.2vw,76px); line-height:0.94;
+    letter-spacing:-0.005em; margin:24px 0 0;
+  }
+  h1 .outline{ color:transparent; -webkit-text-stroke:1.5px var(--amber); }
+  .lead{ max-width:520px; margin:22px 0 0; font-size:18px; line-height:1.6; color:rgba(14,26,20,0.68); }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+  .btn-primary{
+    padding:15px 26px; border-radius:9px; background:var(--green); color:var(--cream); font-weight:700;
+    font-size:15px; border:none;
+  }
+  .btn-secondary{
+    padding:15px 26px; border-radius:9px; border:1px solid rgba(14,26,20,0.2); color:var(--ink);
+    font-weight:500; font-size:15px; background:none;
+  }
+  .stats-strip{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:48px;
+    background:rgba(14,26,20,0.12); border:1px solid rgba(14,26,20,0.12); border-radius:12px; overflow:hidden;
+  }
+  .stat{ background:#fff; padding:18px 20px; }
+  .stat .num{ font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:34px; line-height:1; }
+  .stat .lbl{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:rgba(14,26,20,0.5); margin-top:6px;
+  }
+
+  /* match preview card */
+  .preview-card{
+    background:#fff; border:1px solid rgba(14,26,20,0.12); border-radius:16px;
+    box-shadow:0 24px 48px -32px rgba(12,42,32,0.35); overflow:hidden;
+  }
+  .preview-head{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 18px;
+    background:var(--forest); color:var(--cream);
+  }
+  .preview-context{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;
+    color:rgba(246,245,241,0.68);
+  }
+  .level-tabs{ display:flex; gap:3px; padding:3px; border-radius:7px; background:rgba(246,245,241,0.12); }
+  .level-tab{
+    padding:6px 12px; border:none; border-radius:5px; font-size:12px; font-weight:700; background:transparent;
+    color:rgba(246,245,241,0.66);
+  }
+  .level-tab.active{ background:var(--cream); color:var(--forest); }
+
+  .match-row{ padding:18px; border-bottom:1px solid rgba(14,26,20,0.09); }
+  .match-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .match-teams{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .team-chip{ width:22px; height:22px; border-radius:5px; flex-shrink:0; }
+  .team-chip.home{ background:rgba(11,107,79,0.12); }
+  .team-chip.away{ background:rgba(200,124,26,0.14); }
+  .team-name{ font-family:'Saira Condensed',sans-serif; font-weight:600; font-size:21px; }
+  .vs{ color:rgba(14,26,20,0.32); font-size:13px; }
+  .match-time{ font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(14,26,20,0.5); white-space:nowrap; }
+
+  .prob-bar{ display:flex; gap:3px; margin-top:14px; height:9px; border-radius:4px; overflow:hidden; background:rgba(14,26,20,0.08); }
+  .prob-seg.h{ background:var(--green); }
+  .prob-seg.d{ background:rgba(14,26,20,0.28); }
+  .prob-seg.a{ background:var(--amber); }
+  .prob-labels{ display:flex; justify-content:space-between; margin-top:9px; font-size:13px; }
+  .prob-labels .h{ color:var(--green); font-weight:700; }
+  .prob-labels .n{ color:rgba(14,26,20,0.55); }
+  .prob-labels .a{ color:var(--amber); font-weight:700; }
+
+  .plain-text{ margin:12px 0 0; font-size:13.5px; line-height:1.5; color:rgba(14,26,20,0.66); }
+
+  .form-row{ display:flex; align-items:center; gap:18px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(14,26,20,0.08); }
+  .form-group{ display:flex; align-items:center; gap:7px; }
+  .form-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:rgba(14,26,20,0.45); }
+  .form-badge{
+    display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:4px;
+    font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; color:#fff;
+  }
+
+  .detail-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; padding-top:12px;
+    border-top:1px solid rgba(14,26,20,0.08); font-family:'JetBrains Mono',monospace; font-size:10.5px;
+    color:rgba(14,26,20,0.5);
+  }
+  .detail-grid span{ color:var(--ink); font-size:13px; }
+
+  .conf-row{ display:flex; align-items:center; gap:8px; margin-top:13px; }
+  .conf-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(14,26,20,0.45); }
+  .conf-badge{ font-size:12px; font-weight:700; padding:3px 9px; border-radius:5px; }
+  .conf-badge.high{ color:var(--green); background:rgba(11,107,79,0.1); }
+  .conf-badge.mid{ color:var(--amber-dark); background:rgba(200,124,26,0.14); }
+
+  .preview-foot{ padding:12px 18px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:rgba(14,26,20,0.42); }
+
+  /* niveaux section */
+  .section{ padding:76px 32px; max-width:1400px; margin:0 auto; }
+  .section.bordered{ background:#fff; border-top:1px solid rgba(14,26,20,0.1); border-bottom:1px solid rgba(14,26,20,0.1); max-width:none; }
+  .section.bordered > div{ max-width:1400px; margin:0 auto; }
+  .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap; }
+  h2{ font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:clamp(32px,4.2vw,50px); line-height:1; margin:0; max-width:620px; }
+  .section-sub{ max-width:420px; margin:0; font-size:16px; line-height:1.6; color:rgba(14,26,20,0.62); }
+
+  .level-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px; }
+  .level-card{
+    cursor:pointer; border-radius:14px; padding:26px; background:var(--cream);
+    border:1px solid rgba(14,26,20,0.12); transition:background 160ms ease, border-color 160ms ease;
+  }
+  .level-card.active{ background:rgba(11,107,79,0.06); border-color:var(--green); }
+  .level-tag{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); }
+  .level-card h3{ font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:30px; margin:12px 0 0; }
+  .level-card p{ margin:10px 0 0; font-size:15px; line-height:1.6; color:rgba(14,26,20,0.65); }
+  .level-bullets{ margin-top:18px; padding-top:16px; border-top:1px solid rgba(14,26,20,0.1); display:flex; flex-direction:column; gap:8px; }
+  .level-bullets div{ display:flex; gap:10px; font-size:14px; color:rgba(14,26,20,0.82); }
+  .level-bullets span.dash{ color:var(--green); }
+
+  /* méthode */
+  .method-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:36px;
+    background:rgba(14,26,20,0.12); border:1px solid rgba(14,26,20,0.12); border-radius:14px; overflow:hidden;
+  }
+  .method-card{ background:#fff; padding:30px; }
+  .method-num{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--green); }
+  .method-card h3{ font-family:'Saira Condensed',sans-serif; font-weight:600; font-size:25px; margin:12px 0 0; }
+  .method-card p{ margin:9px 0 0; font-size:15px; line-height:1.6; color:rgba(14,26,20,0.62); }
+
+  .not-box{
+    border:1px solid rgba(200,124,26,0.35); border-radius:14px; background:rgba(200,124,26,0.07);
+    padding:28px 32px; margin-top:18px; display:grid; grid-template-columns:minmax(220px,0.7fr) minmax(320px,1.3fr);
+    gap:36px; align-items:center;
+  }
+  .not-box h3{ font-family:'Saira Condensed',sans-serif; font-weight:700; font-size:30px; line-height:1.05; margin:0; color:var(--amber-dark); }
+  .not-box p{ margin:0; font-size:16px; line-height:1.65; color:rgba(14,26,20,0.75); }
+
+  /* CTA final */
+  .cta-section{ padding:84px 32px; background:var(--forest); color:var(--cream); text-align:center; }
+  .cta-section h2{ color:var(--cream); font-size:clamp(32px,5vw,58px); line-height:1; margin:0 auto; max-width:740px; }
+  .cta-row{ display:flex; justify-content:center; gap:12px; margin-top:28px; flex-wrap:wrap; }
+  .btn-mint{ padding:15px 30px; border-radius:9px; background:var(--mint); color:var(--forest); font-weight:700; font-size:15px; border:none; }
+  .btn-outline-light{ padding:15px 30px; border-radius:9px; border:1px solid rgba(246,245,241,0.28); color:var(--cream); font-weight:500; font-size:15px; background:none; }
+
+  footer{
+    padding:24px 32px 34px; display:flex; align-items:center; justify-content:space-between; gap:24px;
+    flex-wrap:wrap; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.06em; color:rgba(14,26,20,0.45);
+  }
+
+  @media (max-width:860px){
+    .hero{ grid-template-columns:1fr; }
+    .level-cards, .method-grid, .stats-strip{ grid-template-columns:1fr; }
+    .not-box{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticker-bar">
+  <div class="ticker-live"><span class="ticker-dot"></span>En direct</div>
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<header>
+  <div class="brand">
+    <div class="mark">S</div>
+    <span class="wordmark">STATLINE</span>
+  </div>
+  <nav>
+    <a href="#matchs">Matchs du jour</a>
+    <a href="#niveaux">Niveaux</a>
+    <a href="#methode">Méthode</a>
+    <a href="app.html" class="nav-cta">Ouvrir l'app</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="league-tags" id="leagueTags"></div>
+    <h1>L'analyse du match,<br>avant le <span class="outline">coup d'envoi</span></h1>
+    <p class="lead">Statline convertit les cotes du marché en probabilités lisibles, avec la forme récente et un indice de confiance sur chaque rencontre. Débutant ou analyste : la même donnée, expliquée à votre niveau.</p>
+    <div class="hero-ctas">
+      <a href="#matchs" class="btn-primary">Voir les matchs du jour</a>
+      <a href="#methode" class="btn-secondary">Comment ça marche</a>
+    </div>
+    <div class="stats-strip">
+      <div class="stat"><div class="num">1 200+</div><div class="lbl">Matchs analysés</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">Niveaux de lecture</div></div>
+      <div class="stat"><div class="num">0 €</div><div class="lbl">Sans abonnement</div></div>
+    </div>
+  </div>
+
+  <div class="preview-card" id="matchs">
+    <div class="preview-head">
+      <div class="preview-context">Samedi · Ligue 1 · Journée 4</div>
+      <div class="level-tabs" id="levelTabsHero"></div>
+    </div>
+    <div id="matchList"></div>
+    <div class="preview-foot" id="previewFoot"></div>
+  </div>
+</section>
+
+<section class="section bordered" id="niveaux">
+  <div>
+    <div class="section-head">
+      <h2>Une seule donnée, trois façons de la lire</h2>
+      <p class="section-sub">Changez de niveau en haut de la carte : l'interface se simplifie ou s'ouvre, sans jamais cacher la méthode.</p>
+    </div>
+    <div class="level-cards" id="levelCards"></div>
+  </div>
+</section>
+
+<section class="section" id="methode">
+  <h2>La méthode, en clair</h2>
+  <div class="method-grid">
+    <div class="method-card">
+      <div class="method-num">01</div>
+      <h3>On collecte les cotes</h3>
+      <p>Plusieurs opérateurs, relevés en continu sur les cinq grands championnats européens.</p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">02</div>
+      <h3>On retire la marge</h3>
+      <p>La commission du bookmaker est neutralisée pour obtenir une probabilité réelle, pas une cote commerciale.</p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">03</div>
+      <h3>On note la confiance</h3>
+      <p>Quand les opérateurs divergent, la confiance baisse — et c'est écrit sur la carte.</p>
+    </div>
+  </div>
+
+  <div class="not-box">
+    <h3>Ce que Statline ne fait pas</h3>
+    <p>Aucun pronostic garanti, aucune promesse de gain, aucun placement de paris. Statline est un outil de lecture statistique. Les paris comportent un risque de dépendance et de perte d'argent — jouer doit rester un loisir.</p>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Commencez par un match. Restez pour la méthode.</h2>
+  <div class="cta-row">
+    <a href="app.html" class="btn-mint">Ouvrir l'app</a>
+    <a href="#niveaux" class="btn-outline-light">Choisir mon niveau</a>
+  </div>
+</section>
+
+<footer>
+  <span>STATLINE · 2026</span>
+  <span>18+ · Jouer comporte des risques · 09 74 75 13 13</span>
+</footer>
+
+<script>
+const LEAGUES = ['LIGUE 1','PREMIER LEAGUE','LA LIGA','SERIE A','BUNDESLIGA'];
+const TICKER = [
+  { league:'L1', label:'Lyon – Monaco', value:'46 / 27 / 27' },
+  { league:'PL', label:'Arsenal – Everton', value:'61 / 22 / 17' },
+  { league:'SA', label:'Milan – Torino', value:'55 / 25 / 20' },
+  { league:'LIGA', label:'Betis – Girona', value:'41 / 29 / 30' },
+  { league:'BUN', label:'Leipzig – Mayence', value:'58 / 23 / 19' },
+];
+
+const LEVELS = [
+  { short:'Simple', tag:'Niveau 1', name:'Découverte',
+    desc:'Une phrase par match, aucune statistique à décoder. Vous voyez qui est favori et à quel point.',
+    bullets:['Probabilités en pourcentages','Résumé en langage courant','Zéro jargon'] },
+  { short:'Standard', tag:'Niveau 2', name:'Régulier',
+    desc:'Les probabilités, la forme des cinq derniers matchs et la confiance du modèle.',
+    bullets:['Répartition 1-N-2','Forme récente des deux équipes','Indice de confiance'] },
+  { short:'Détaillé', tag:'Niveau 3', name:'Analyste',
+    desc:"Tout est ouvert : xG modélisé, marge du book, dérive des cotes depuis l'ouverture.",
+    bullets:['xG modélisé par équipe','Marge opérateur retirée','Export CSV des relevés'] },
+];
+
+const MATCHES = [
+  { home:'Lyon', away:'Monaco', time:'21:00', h:46, d:27, a:27, conf:'Élevée', xg:'1.7 – 1.3', margin:'4.1 %', drift:'+0.9 %',
+    hf:'VVNDV', af:'VNVDN', plain:"Lyon part légèrement favori à domicile, mais l'écart reste faible : un match ouvert." },
+  { home:'Brest', away:'Nice', time:'19:00', h:33, d:30, a:37, conf:'Moyenne', xg:'1.2 – 1.4', margin:'5.6 %', drift:'−1.4 %',
+    hf:'DNDVN', af:'VVNVD', plain:"Les opérateurs ne s'accordent pas : léger avantage à Nice, à prendre avec prudence." },
+  { home:'Lille', away:'Rennes', time:'17:00', h:52, d:25, a:23, conf:'Élevée', xg:'1.9 – 1.1', margin:'3.8 %', drift:'+2.2 %',
+    hf:'VVVND', af:'NDVDD', plain:"Lille est nettement favori : plus d'une chance sur deux de gagner chez lui." },
+];
+
+let level = 1; // niveau par défaut : Régulier
+
+function formBadges(seq){
+  const bg = { V:'#0B6B4F', N:'rgba(14,26,20,0.32)', D:'#C87C1A' };
+  return seq.split('').map(r => `<span class="form-badge" style="background:${bg[r]}">${r}</span>`).join('');
+}
+
+function renderTicker(){
+  document.getElementById('tickerTrack').innerHTML = TICKER.map(t =>
+    `<span><span class="lg">${t.league}</span>&nbsp; ${t.label} &nbsp;<span class="val">${t.value}</span></span>`
+  ).join('');
+}
+
+function renderLeagueTags(){
+  document.getElementById('leagueTags').innerHTML = LEAGUES.map(lg => `<span class="league-tag">${lg}</span>`).join('');
+}
+
+function renderLevelTabs(){
+  document.getElementById('levelTabsHero').innerHTML = LEVELS.map((l,i) =>
+    `<button type="button" class="level-tab ${i===level?'active':''}" data-level="${i}">${l.short}</button>`
+  ).join('');
+  document.querySelectorAll('.level-tab').forEach(btn => {
+    btn.onclick = () => { level = parseInt(btn.dataset.level); renderAll(); };
+  });
+}
+
+function renderMatches(){
+  const showPlain = true; // toujours affiché, comme dans le design source
+  const showForm = level >= 1;
+  const showDetail = level === 2;
+
+  document.getElementById('matchList').innerHTML = MATCHES.map(m => `
+    <div class="match-row">
+      <div class="match-top">
+        <div class="match-teams">
+          <span class="team-chip home"></span>
+          <span class="team-name">${m.home}</span>
+          <span class="vs">vs</span>
+          <span class="team-name">${m.away}</span>
+          <span class="team-chip away"></span>
+        </div>
+        <span class="match-time">${m.time}</span>
+      </div>
+
+      <div class="prob-bar">
+        <div class="prob-seg h" style="width:${m.h}%"></div>
+        <div class="prob-seg d" style="width:${m.d}%"></div>
+        <div class="prob-seg a" style="width:${m.a}%"></div>
+      </div>
+      <div class="prob-labels">
+        <span class="h">${m.h}% dom.</span>
+        <span class="n">${m.d}% nul</span>
+        <span class="a">${m.a}% ext.</span>
+      </div>
+
+      ${showPlain ? `<p class="plain-text">${m.plain}</p>` : ''}
+
+      ${showForm ? `
+        <div class="form-row">
+          <div class="form-group"><span class="form-label">Forme</span>${formBadges(m.hf)}</div>
+          <div class="form-group">${formBadges(m.af)}</div>
+        </div>` : ''}
+
+      ${showDetail ? `
+        <div class="detail-grid">
+          <div>xG modélisé<br><span>${m.xg}</span></div>
+          <div>Marge livre<br><span>${m.margin}</span></div>
+          <div>Dérive cotes<br><span>${m.drift}</span></div>
+        </div>` : ''}
+
+      <div class="conf-row">
+        <span class="conf-label">Confiance</span>
+        <span class="conf-badge ${m.conf==='Élevée'?'high':'mid'}">${m.conf}</span>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('previewFoot').textContent = `Lecture : ${LEVELS[level].name} · aucune garantie de gain`;
+}
+
+function renderLevelCards(){
+  document.getElementById('levelCards').innerHTML = LEVELS.map((l,i) => `
+    <div class="level-card ${i===level?'active':''}" data-level="${i}">
+      <div class="level-tag">${l.tag}</div>
+      <h3>${l.name}</h3>
+      <p>${l.desc}</p>
+      <div class="level-bullets">
+        ${l.bullets.map(b => `<div><span class="dash">—</span><span>${b}</span></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.level-card').forEach(card => {
+    card.onclick = () => { level = parseInt(card.dataset.level); renderAll(); window.location.hash = 'matchs'; };
+  });
+}
+
+function renderAll(){
+  renderLevelTabs();
+  renderMatches();
+  renderLevelCards();
+}
+
+renderTicker();
+renderLeagueTags();
+renderAll();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
